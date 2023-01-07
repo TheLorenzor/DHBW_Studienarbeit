@@ -1,3 +1,5 @@
 datasets/
 /.idea/
 dtld_parsing/matlab
+dtld_parsing/images
+yolov5/data/images
