@@ -2,6 +2,7 @@ import os
 import cv2
 import numpy as np
 from PIL import Image
+from classes import BoschFilter
 from matplotlib import cm
 import matplotlib
 matplotlib.use('TkAgg')
@@ -15,7 +16,7 @@ baseDirecotry = "./datasets/Rohdaten/"
 
 def DTLDNormalize():
     # reads path
-    imgPath = "D:\Programmieren\\Uni\Studienarbeit\datasets\Rohdaten\DTLD\Berlin\Berlin\Berlin1\\2015-04-17_10-50-05\DE_BBBR667_2015-04-17_10-50-13-633939_k0.tiff"
+    imgPath = "D:\Programmieren\\Uni\Studienarbeit\datasets\Rohdaten\DTLD\Pictures\Berlin\Berlin\Berlin1\\2015-04-17_10-50-05\DE_BBBR667_2015-04-17_10-50-13-633939_k0.tiff"
     # reads it as unchanged thread of data
     img = cv2.imread(imgPath, cv2.IMREAD_UNCHANGED)
     # converts it via the  bayer filter into an rgb image
@@ -29,3 +30,7 @@ def DTLDNormalize():
     im.save("test.jpg", quality=95)
 
 DTLDNormalize()
+
+
+bosch = BoschFilter("D:\Programmieren\\Uni\Studienarbeit\datasets\Rohdaten\Bosch Training Dataset","D:\Programmieren\\Uni\Studienarbeit\datasets\\trafficlights\\train")
+bosch.convertToJPGSmall()
