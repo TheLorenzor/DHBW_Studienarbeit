@@ -1,8 +1,8 @@
 
 
-path: ../datasets/trafficlights
-train: /train/images
-
+path: D:/Programmieren/Uni/Studienarbeit/datasets/trafficlights
+train: ./train/images
+val: ./valid/images
 
 
 

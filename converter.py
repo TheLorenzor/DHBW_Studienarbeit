@@ -29,8 +29,9 @@ def DTLDNormalize():
     # save as jpgf
     im.save("test.jpg", quality=95)
 
-DTLDNormalize()
+#DTLDNormalize()
 
 
 bosch = BoschFilter("D:\Programmieren\\Uni\Studienarbeit\datasets\Rohdaten\Bosch Training Dataset","D:\Programmieren\\Uni\Studienarbeit\datasets\\trafficlights\\train")
+bosch.convertToJPGLarge()
 bosch.convertToJPGSmall()
