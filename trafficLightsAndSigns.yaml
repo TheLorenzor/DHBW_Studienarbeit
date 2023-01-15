@@ -1,11 +1,11 @@
 
 
 path: D:/Programmieren/Uni/Studienarbeit/datasets/trafficlights
-train: ./train/images
-val: ./valid/images
+train: train/images
+val: valid/images
 
 
-
+nc: 12
 names:
   0: red
   1: green
