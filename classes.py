@@ -105,7 +105,9 @@ class DTLD():
     def read_all_JSON(self):
         json_base = os.path.join(self.base_dir_to_process,"DTLD_Labels_v2.0","v2.0","DTLD_all.json")
         list_of_elem = json.load(open(json_base))["images"]
-        print(len(list_of_elem))
+        for image in list_of_elem:
+            print(image)
+            break
 
 
 
