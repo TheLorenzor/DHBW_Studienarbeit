@@ -2,7 +2,7 @@ import os
 import cv2
 import numpy as np
 from PIL import Image
-from classes import BoschFilter
+from classes import BoschFilter,DTLD
 from matplotlib import cm
 import matplotlib
 matplotlib.use('TkAgg')
@@ -31,7 +31,12 @@ def DTLDNormalize():
 
 #DTLDNormalize()
 
+all_imgs = os.listdir(os.path.join("datasets", "trafficlights", "train", "images"))
+if all_imgs == 0:
+    bosch = BoschFilter("D:\Programmieren\\Uni\Studienarbeit\datasets\Rohdaten\Bosch Training Dataset","D:\Programmieren\\Uni\Studienarbeit\datasets\\trafficlights\\train")
+    bosch.convertToJPGLarge()
+    bosch.convertToJPGSmall()
+    print("Bosch finished")
 
-bosch = BoschFilter("D:\Programmieren\\Uni\Studienarbeit\datasets\Rohdaten\Bosch Training Dataset","D:\Programmieren\\Uni\Studienarbeit\datasets\\trafficlights\\train")
-bosch.convertToJPGLarge()
-bosch.convertToJPGSmall()
+daimler = DTLD()
+daimler.read_all_JSON()

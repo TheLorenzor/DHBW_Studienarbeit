@@ -1,7 +1,7 @@
 import os
 from PIL import Image
 import yaml
-
+import json
 
 class BoschFilter():
     def __init__(self, basePath, dest):
@@ -89,3 +89,23 @@ class BoschFilter():
             return list(self.classTypes["names"].values()).index(class_name.lower())
         except:
             return -1
+
+class DTLD():
+    def __init__(self):
+
+        self.base_dir_target =os.path.join("datasets","trafficlights")
+        all_imgs = os.listdir(os.path.join("datasets","trafficlights","train","images"))
+        all_imgs.sort(key=lambda x: int(x[:x.index(".")]))
+        # get the last element after sorted the list and get from that the last element (which is automatically the
+        # largest and then add 1)
+        self.__iterab = int(all_imgs[len(all_imgs)-1][:all_imgs[len(all_imgs)-1].index(".")]) + 1
+        self.base_dir_to_process = os.path.join("datasets","Rohdaten","DTLD")
+
+
+    def read_all_JSON(self):
+        json_base = os.path.join(self.base_dir_to_process,"DTLD_Labels_v2.0","v2.0","DTLD_all.json")
+        list_of_elem = json.load(open(json_base))["images"]
+        print(len(list_of_elem))
+
+
+
