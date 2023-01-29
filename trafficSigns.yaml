@@ -1,0 +1,19 @@
+
+
+path: ./datasets/traffic_signs
+train: train/images
+val: valid/images
+
+nc:
+
+names:
+  0: speed_limit_30
+  1: speed_limit_70
+  2: stop
+  3: grant_right_of_way
+  4: no_entry
+  5: construction_site
+  6: no_vehicles_allowed
+  7: danger
+  8: pedestrian_way
+  9: pedestrian_crossing
