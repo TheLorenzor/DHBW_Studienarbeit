@@ -27,7 +27,7 @@ WORKDIR /usr/src/app
 
 # Copy contents
 # COPY . /usr/src/app  (issues as not a .git directory)
-RUN git clone https://github.com/ultralytics/yolov5 /usr/src/app
+
 
 # Set environment variables
 ENV OMP_NUM_THREADS=1
@@ -39,7 +39,7 @@ ENV OMP_NUM_THREADS=1
 # t=ultralytics/yolov5:latest && sudo docker build -f utils/docker/Dockerfile -t $t . && sudo docker push $t
 
 # Pull and Run
-# t=ultralytics/yolov5:latest && sudo docker pull $t && sudo docker run -it --ipc=host --gpus all $t
+#t=ultralytics/yolov5:latest && sudo docker pull $t && sudo docker run -it --ipc=host --gpus all $t
 
 # Pull and Run with local directory access
 # t=ultralytics/yolov5:latest && sudo docker pull $t && sudo docker run -it --ipc=host --gpus all -v "$(pwd)"/datasets:/usr/src/datasets $t
