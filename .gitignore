@@ -1,7 +1,6 @@
 **.jpg
-datasets/
+data/datasets/
 /.idea/
-dtld_parsing/matlab
-dtld_parsing/images
-yolov5/data/images
+Preperation/
+traffic-light/yolov5/data/images
 !.gitkeep
