@@ -4,3 +4,6 @@ data/datasets/
 Preperation/
 traffic-light/yolov5/data/images
 !.gitkeep
+!main.tex
+/doc/main.*
+/.vscode
