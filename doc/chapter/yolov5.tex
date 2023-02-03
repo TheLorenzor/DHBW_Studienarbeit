@@ -2,8 +2,8 @@
 \ac{yolo} ist ein populäres Objekt Erkennungsmodell, dass dafür bekannt ist besonders schnell und akkurat Objekte in Bildern zu erkennen. Dies liegt an der kleinen Modellgröße und den hohen Berechnungsgeschwindigkeiten. Des Weiteren nutzt \ac{yolo} das gesamte Bild als Trainingsgrundlage, was es sowohl ermöglicht Videos zu klassifizieren als auch die Fehlerrate reduziert, dass der Hintergrund als Teil des Objektes klassifiziert wird. In diesem Kapitel geht es darum wie die Schnittstelle bzw. der Algorithmus gefüttert werden muss und was der Algorithmus für Datenformate erwartet \cite{Jiang.2022}.
 
 \begin{wrapfigure}{r}{5cm}
-    \includegraphics[width=5cm]{data/img/ordnerstruktur_yolo.png}
-    \caption*{Ordnerstruktur für einen Datensatz}
+    \includegraphics[width=4cm]{data/img/ordnerstruktur_yolo.png}
+    \caption{Ordnerstruktur für einen Datensatz}
     \label{fig:folderYolo}
 \end{wrapfigure}
 
@@ -17,10 +17,19 @@ Für die Studienarbeit wird der YOLOv5 von ultralytics \cite{glennjocher.2023} g
 \end{itemize}
 
 
-\section*{Generelle Ordnerstruktur}
+\section{Generelle Ordnerstruktur}
 Der \ac{yolo}-Algorithmus erwartet zum funktionieren eine generelle Ordnerstruktur, gezeigt in \ref{fig:folderYolo}. Der oberste Ordner ist dabei der Projektnameordner. In diesem müssen alle Projektrelevanten Bilder und Label enthalten sein. 
 
-Auch darin enthalten sein muss das \textit{.yaml} file. Das wird in Kapitel \ref{sec:yaml_class} noch mal genauer beschrieben. Ansonsten müssen neben dem \textit{.yaml} file noch ein Ordner für die Trainingsdaten enthalten sein. Optional auch ein Testdatenordner und Validierungsdatenordner.
+Auch darin enthalten sein muss das \textit{.yaml} file. Das wird in Kapitel \ref{sec:yaml_class} noch mal genauer beschrieben. Ansonsten müssen neben dem \textit{.yaml} file noch ein Ordner für die Trainingsdaten enthalten sein. Optional auch ein Testdatenordner und Validierungsdatenordner. Diese müssen wie der Trainingsdatenordner unter dem Projektordner eingeordnet werden.
 
-\section*{YAML Klassifizierungsfile}
+Der Test, Train und Validordner müssen ale jeweils 2 Ordner haben für images und labels. Diese müssen auch über die verschiedenen ordner exakt gleich benannt sein. Das heißt auch in der Groß- und Kleinschreibung. 
+
+In dem images Ordner sind die vielen Testbilder enthalten, und in Labels die entsprechenden label dazu. Als Bildformate werden von dieser \ac{yolo} Version png, jpg und tiff Formate verarbeitet. Jeder Bildname muss einzigartig vorhanden sein (ich empfehle einfach die Bilder durchzunumerieren).
+
+Bei den labeln werden nur .txt Dateien akzeptiert. Wichtig ist hier, dass die Daten zu einem Bild in einer gleichnamen .txt-Datei enthalten ist. Wenn als Beispiel ein Bild mit dem Namen \textit{test.jpg} vorhanden ist muss im Ordner labels auch das dazugehörige Labelfile \textit{test.txt} heißen.
+
+\section{Aufbau der Label}
+
+
+\section{YAML Klassifizierungsfile}
 \label{sec:yaml_class}
