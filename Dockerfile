@@ -14,11 +14,10 @@ COPY requirements.txt .
 RUN python -m pip install --upgrade pip wheel
 RUN pip uninstall -y Pillow torchtext torch torchvision
 RUN pip install --no-cache -U pycocotools  # install --upgrade
-RUN pip install --no-cache -r requirements.txt albumentations comet gsutil notebook 'opencv-python<4.6.0.66'  \
-    Pillow>=9.1.0 ultralytics \
-    --extra-index-url https://download.pytorch.org/whl/cu113
+RUN pip install --no-cache -r requirements.txt albumentations comet gsutil notebook 'opencv-python<4.6.0.66'  Pillow>=9.1.0 ultralytics --extra-index-url https://download.pytorch.org/whl/cu113
 
 RUN mkdir -p /usr/src/traffic-ai
 WORKDIR /usr/src/traffic-ai
 
 COPY . /usr/src/traffic-ai
+RUN rm -rf /user/src/traffic-ai/doc

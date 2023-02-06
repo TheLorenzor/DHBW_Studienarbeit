@@ -1,0 +1,8 @@
+
+
+
+FROM python:3.8-slim-buster
+#RUN rm -rf /opt/pytorch  # remove 1.2GB dir
+RUN apt update && apt install --no-install-recommends -y zip htop screen libgl1-mesa-glx
+RUN mkdir -p /usr/ect/app/test/
+COPY requirements.txt /usr/ect/app/test/
