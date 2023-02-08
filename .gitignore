@@ -7,3 +7,4 @@ traffic-light/yolov5/data/images
 !main.tex
 /doc/main.*
 /.vscode
+.env
