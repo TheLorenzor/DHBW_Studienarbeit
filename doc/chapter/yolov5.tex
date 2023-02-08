@@ -22,14 +22,27 @@ Der \ac{yolo}-Algorithmus erwartet zum funktionieren eine generelle Ordnerstrukt
 
 Auch darin enthalten sein muss das \textit{.yaml} file. Das wird in Kapitel \ref{sec:yaml_class} noch mal genauer beschrieben. Ansonsten müssen neben dem \textit{.yaml} file noch ein Ordner für die Trainingsdaten enthalten sein. Optional auch ein Testdatenordner und Validierungsdatenordner. Diese müssen wie der Trainingsdatenordner unter dem Projektordner eingeordnet werden.
 
-Der Test, Train und Validordner müssen ale jeweils 2 Ordner haben für images und labels. Diese müssen auch über die verschiedenen ordner exakt gleich benannt sein. Das heißt auch in der Groß- und Kleinschreibung. 
+Der Test, Train und Validordner müssen alle jeweils 2 Ordner haben für images und labels. Diese müssen auch über die verschiedenen Ordner exakt gleich benannt sein. Das heißt auch in der Groß- und Kleinschreibung. 
 
 In dem images Ordner sind die vielen Testbilder enthalten, und in Labels die entsprechenden label dazu. Als Bildformate werden von dieser \ac{yolo} Version png, jpg und tiff Formate verarbeitet. Jeder Bildname muss einzigartig vorhanden sein (ich empfehle einfach die Bilder durchzunumerieren).
 
 Bei den labeln werden nur .txt Dateien akzeptiert. Wichtig ist hier, dass die Daten zu einem Bild in einer gleichnamen .txt-Datei enthalten ist. Wenn als Beispiel ein Bild mit dem Namen \textit{test.jpg} vorhanden ist muss im Ordner labels auch das dazugehörige Labelfile \textit{test.txt} heißen.
 
 \section{Aufbau der Label}
+Jede Textdatei beinhaltet alle Label, die in dem dazugehörigen Bild zu finden sind. Dabei steht jede Zeile für ein Objekt das auf der Abbildung auffindbar ist. Diese können sich auch überlappen. Eine Zeile ist wie aufgebaut:
+\begin{tcolorbox}
+    \textless class\textgreater\space \textless x\_center\textgreater \space \textless y\_center\textgreater \space\textless width\textgreater \space\textless height\textgreater 
+\end{tcolorbox}
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=8cm]{data/img/yolo_picture_structure.png}    
+        \caption{Struktur YOLO Format veranschaulicht}
+        \label{fig:yoloFormat}
+    \end{center}
+\end{figure}
+Die "class" gibt an, welche Klasse das markierte Objekt hat. Die Klasse und dessen Name wird in dem YAML File definiert, worin auch angegeben wird wie viele Klassen es insgesamt gibt aber das wird in \ref{sec:yaml_class} noch einmal genauer erklärt. Der \textit{x\_center} gibt den Mittelpunkt des Labels an entlang der x-Achse (horizontal). \textit{y\_center} gibt das gleiche in der Vertikalen Richtung an. Genau kann das im Bild \ref{fig:yoloFormat} sehen. Der Punkt in der Mitte ist definiert durch \textit{x\_center} und \textit{y\_center}. Die komplette Breite und Lange wird entsprechend durch \textit{width} und \textit{height} dargestellt. 
 
+Insgesamt werden alle Maße nicht in der px Anzahl dargestellt. Es wird dargestellt als das Verhältnis von der Länge/ Breite zur Gesamtlänge und -breite. Es wird dargestellt als eine \textit{float}-Nummer zwischen 0 und 1. Bei dem \textit{x\_center} und \textit{y\_center} wird zwischen den Punkt und dem Nullpunkt die Länge und Verhältnis zum gesamten Bild genommen in der entsprechenden Dimension. 
 
 \section{YAML Klassifizierungsfile}
 \label{sec:yaml_class}
