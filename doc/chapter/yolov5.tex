@@ -46,3 +46,18 @@ Insgesamt werden alle Maße nicht in der px Anzahl dargestellt. Es wird dargeste
 
 \section{YAML Klassifizierungsfile}
 \label{sec:yaml_class}
+
+Für jedes Projekt gibt es im Basis Folder ein \textit{.yaml} File mit einem selbstgewählten Namen. Dieses File besteht aus drei Teilen. Diese sind wie folgt aufgebaut:
+\begin{verbatim}
+    path: <path-to-yolo>
+    train: <rel-path-to-train-dir>
+    val: <rel-path-to-val-dir>
+
+    names:
+        0: <name>
+        ...
+\end{verbatim}
+
+\textless rel-path-to-train-dir\textgreater ist der relative Pfad zum Trainingsdatensatz. Wenn der Standarttrainingssatzaufbau wie in Abbildung \ref{fig:folderYolo} aufgesetzt ist, dann ist dies \textit{./train/}. Der Pfad für den Validierungsdatensatz \textless rel-path-to-val-dir\textgreater ist ähnlich zu dem Trainingsdatensatzpfad. Beim Standardformat wäre es \textit{./valid/}. Der Pfad gibt den momentan Pfad an. Dieser wird durch die API ersetzt und kann standardisiert mit einem  \glqq .\grqq angegeben.
+
+Unter \textit{names} werden die Namen aller relevanten Klassen angegeben. Dies sind die Klassen der jeweiligen Label und deren Bedeutung. Das heißt für ein Label einer Roten und gelben Ampel die geradeaus führt würde es Beispielsweise heißen \textit{0: rot-gelb-geradeaus}. Alle Label werden aufsteigend nummeriert. Die jeweilige Nummer in dem YAML File muss mit der jeweiligen Nummer in den \textit{.txt} Files übereinstimmen. Wenn die Nummer dieselbe ist, geht der YOLO-Aglorithmus aus, dass die jeweilige Nummer des Labels den Text beschreibt der im \textit{.yaml} File steht.
