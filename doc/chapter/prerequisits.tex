@@ -17,3 +17,14 @@ Der Link kann je nachdem geändert werden, was für eine CUDA Version benötigt 
 \section{Probleme + Lösungen der Installation}
 
 Bei der Installation kann es zu verschiedenen Probleme kommen, die zumindest beim Bearbeiten der Arbeit entstanden sind.
+
+\textbf{Problem 1:} Der Dockercontainer Startet nicht.
+
+\textbf{Lösung:} 
+\begin{enumerate}
+    \item Das GitHub Repository von ultralytics \cite{glennjocher.2023} neu clonen 
+    \item Das Dockerfile von \textit{./utils/docker/Dockerfile} in \textit{./} rein kopieren
+    \item Dockerfile ausführen  (das kann je nach Anwendung eine sehr lange Zeit in Anspruch nehmen aufgrund der Größe)
+    \item Dockercontainer starten
+\end{enumerate}
+
