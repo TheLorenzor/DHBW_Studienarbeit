@@ -1,0 +1,11 @@
+\chapter{Bilderkennung}
+
+Zur Nutzung der Bilderkennung des Yolo Alogrithmus vor allem mit eigenständigen Labeln müssen die vorherigen beschriebenen Schritte beachtet werden. Nun können Bilder, Videos oder andere Objekte eingespeist werden und werden erkannt.
+
+
+\section{Programm zur erkennung}
+Um Modelle erkennen zu können gibt es zwei Wege dies zu tun. Für beide wird das in \autoref{sec:after_exec} beschrieben \textit{best.pt} genutzt. Die eine Möglichkeit ist das von Yolov5 bereitgestellte \textit{detect.py} file zu nutzen. Dazu den Kommentaren in der \textit{\href{https://github.com/ultralytics/yolov5/blob/master/detect.py}{offiziellen Dokumentation}} folgen. 
+
+Die zweite Möglichkeit, die auch genutzt werden kann um multiple Videos oder custom Schnittstellen zu programmieren ist diese Auswertung selber zu programmieren. Dazu sei für den Start an die ausführliche Dokumentation in der \textit{\href{https://github.com/ultralytics/yolov5/issues/36}{YOLOv5 Dokumentation}} verwiesen.
+
+Nach abgeschlossenem Erkennung werden die Ergebnisse als Bilddatei in das Directory \textit{./} abgespeichert. Auch hier werden die erkannten Daten in einem Ordner abgespeichert der sich mit mehreren Erkennungssessions inkrementell erhöht. Gleichzeitig wird ein Objekt zurückgegeben, indem die erkannten Objekte inklusive deren Zuversichtlichkeiten errechnet durch den YOLO Algorithmus zurückgibt.
