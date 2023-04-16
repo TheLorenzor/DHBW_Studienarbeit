@@ -44,13 +44,11 @@ if __name__ =="__main__":
     bosch_path = base_path / 'Rohdaten' / 'Bosch Training Dataset'
     dest_path = base_path / 'data'
     bosch = BoschFilter(bosch_path,dest_path)
-    #current_count = bosch.convertToJPGLarge()
+    current_count = bosch.convertToJPGLarge()
     print("Bosch Traffic Lights Finished")
-    #daimler = DTLD(base_path,bosch_path.parent / 'DTLD')
-    #daimler.read_all_JSON()
+    daimler = DTLD(base_path/'data',bosch_path.parent / 'DTLD',current_count)
+    current_count = daimler.read_all_JSON()
     print("Daimler Traffic Lights Finished")
-    current_count = 5093
-
     current_count = convert_GTSRB('Train',1,current_count)
 
     current_count = current_count- (current_count % 10)+10
