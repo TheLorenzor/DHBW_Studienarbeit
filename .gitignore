@@ -1,5 +1,6 @@
 **.jpg
-data/datasets/
+data/*
+!data/.gitkeep
 /.idea/
 Preperation/
 traffic-light/yolov5/data/images
