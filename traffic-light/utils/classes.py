@@ -1,4 +1,6 @@
 import os
+import pathlib
+import shutil
 import numpy as np
 from PIL import Image
 import yaml
@@ -7,66 +9,57 @@ import cv2
 
 
 class BoschFilter():
-    def __init__(self, basePath, dest):
+    def __init__(self, basePath: pathlib.Path, dest: pathlib.Path):
         self.trainCount = 0
-        self.validCount = 0
         self.base_path = basePath
         # convert the yaml to lists for reading the boxes later
-        self.datasetDescr = yaml.safe_load(
-            open(os.path.join(basePath, "dataset_additional_rgb", "additional_train.yaml")))
-        small = {}
-        # convert it to make it easier to search
-        for descr in self.datasetDescr:
-            id = descr["path"][descr["path"].rfind("/") + 1:descr["path"].rfind(".png")]
-            small[id] = descr["boxes"]
-        self.datasetDescr = small
         self.destPath = dest
-        self.classTypes = yaml.safe_load(open("../../datasets/trafficLightsAndSigns.yaml"))
+        yaml_path = dest / 'studienarbeit_class_names.yaml'
+        self.classTypes = yaml.safe_load(open(yaml_path.resolve()))
 
     def convertToJPGSmall(self):
-        smallPath = os.path.join(os.path.realpath(self.base_path), "dataset_additional_rgb", "rgb", "additional")
-        yaml_path = os.path.join(self.base_path, "dataset_additional_rgb", "additional_train.yaml")
+        smallPath = self.base_path / 'dataset_additional_rgb' / 'rgb' / 'additional'
+        yaml_path = self.base_path / 'dataset_additional_rgb' / 'additional_train.yaml'
         self.converter(smallPath, yaml_path)
 
-    def convertToJPGLarge(self):
-        large_path = os.path.join(os.path.realpath(self.base_path), "train_rgb", "rgb", "train")
-        yaml_path = os.path.join(self.base_path, "train_rgb", "train.yaml")
+    def convertToJPGLarge(self) -> int:
+        large_path = self.base_path / 'train_rgb' / 'rgb' / 'train'
+        yaml_path = self.base_path / 'train_rgb' / 'train.yaml'
         self.converter(large_path, yaml_path)
+        return self.trainCount
 
     def converter(self, path, yaml_path):
         dataset_descr = yaml.safe_load(open(yaml_path))
-        small = {}
+        data_set = {}
         # convert it to make it easier to search
         for descr in dataset_descr:
             id = descr["path"][descr["path"].rfind("/") + 1:descr["path"].rfind(".png")]
-            small[id] = descr["boxes"]
-        dataset_descr = small
+            data_set[id] = descr["boxes"]
+        dataset_descr = data_set
         i = self.trainCount
-        dirs = os.listdir(path)
+        dirs = path.iterdir()
         for singleDir in dirs:
-            newPath = os.path.join(path, singleDir)
-            pictureNames = os.listdir(newPath)
+            pictureNames = singleDir.iterdir()
             for pic in pictureNames:
+                if i % 10 == 0:
+                    basePath = self.destPath / 'valid'
+                    print(i)
+                else:
+                    basePath = self.destPath / 'train'
+                # get width and height of picture
                 try:
-                    boxes = dataset_descr[pic[:pic.find(".")]]
-
-                    img = Image.open(os.path.join(newPath, pic))
-                    img = img.convert('RGB')
+                    img = Image.open(pic.resolve())
                     width, height = img.size
-                    basePath = ""
-                    if i % 10 == 0:
-                        basePath = os.path.join(self.destPath, "../../..", "valid")
-                    else:
-                        basePath = self.destPath
-                    img.save(os.path.join(basePath, "images", str(i) + ".jpg"), quality=95)
-
-                    with open(os.path.join(basePath, "label", str(i) + ".txt"), "w") as f:
-                        textline = ""
+                    img.close()
+                    # move picture to specific build
+                    shutil.copyfile(pic.resolve(), (basePath / 'images' / (str(i) + ".png")).resolve())
+                    boxes = dataset_descr[pic.name[:pic.name.find(".")]]
+                    with open((basePath / "labels" / (str(i) + ".txt")).resolve(), "w") as f:
                         # each picture if it has labels gets iterated through and the labels are beeing put int o
                         # yolo format
                         for props in boxes:
-                            val = self.get_class(props["label"])
-                            if val == -1:
+                            class_id = self.get_class(props["label"])
+                            if class_id == -1:
                                 continue
                             x_size = props["x_max"] - props["x_min"]
                             y_size = props["y_max"] - props["y_min"]
@@ -76,13 +69,10 @@ class BoschFilter():
                             y_size = y_size / height
                             x_center = x_center / width
                             y_center = y_center / height
-                            f.write(
-                                str(val) + " " + str(x_center) + " " + str(y_center) + " " + str(x_size) + " " + str(
-                                    y_size) + "\n")
-                    i = i + 1
-                except Exception as ex:
-                    print(ex)
-                    print("missing: " + pic)
+                            f.write(f'{class_id} {x_center} {y_center} {x_size} {y_size}\n')
+                except KeyError:
+                    print(pic.name[:pic.name.find(".")] + " not found")
+                i += 1
         self.trainCount = i
 
     def get_class(self, class_name: str) -> int:
@@ -93,53 +83,55 @@ class BoschFilter():
 
 
 class DTLD():
-    def __init__(self):
+    def __init__(self, dest_dir: pathlib.Path, src_dir: pathlib.Path, current_count=0):
 
-        self.base_dir_target = os.path.join("../../datasets", "trafficlights")
-        all_imgs = os.listdir(os.path.join("../../datasets", "trafficlights", "train", "images"))
-        all_imgs.sort(key=lambda x: int(x[:x.index(".")]))
+        self.dest_dir = dest_dir
         # get the last element after sorted the list and get from that the last element (which is automatically the
         # largest and then add 1)
-        self.__iterab = int(all_imgs[len(all_imgs) - 1][:all_imgs[len(all_imgs) - 1].index(".")]) + 1
-        self.base_dir_to_process = os.path.join("../../datasets", "Rohdaten", "DTLD")
-        self.yaml_obj = yaml.safe_load(open("../../datasets/trafficLightsAndSigns.yaml"))["names"]
+        self.__iterab = current_count
+        self.base_dir_to_process = src_dir
+        self.yaml_obj = yaml.safe_load((dest_dir / 'studienarbeit_class_names.yaml').open())["names"]
 
     def read_all_JSON(self):
-        json_base = os.path.join(self.base_dir_to_process, "DTLD_Labels_v2.0", "v2.0", "DTLD_all.json")
-        list_of_elem = json.load(open(json_base))["images"]
+        json_base = self.base_dir_to_process / 'DTLD_Labels_v2.0' / 'v2.0' / 'DTLD_all.json'
+        list_of_elem = json.load(json_base.open())["images"]
         for info in list_of_elem:
             # reads it as unchanged thread of data
-            img_arr = cv2.imread(os.path.join(self.base_dir_to_process, "Pictures", info["image_path"][2:]),
-                                 cv2.IMREAD_UNCHANGED)
-            # converts it via the  bayer filter into an rgb image
-            img_arr = cv2.cvtColor(img_arr, cv2.COLOR_BAYER_GB2BGR)
-            img_arr = cv2.cvtColor(img_arr, cv2.COLOR_BGR2RGB)
-            img_arr = np.right_shift(img_arr, 4)
-            # set the right tones (convert to 8bit from 12 bit)
-            img_arr = img_arr.astype(np.uint8)
-            # get height of the image for calculation in relation
-            height_img = img_arr.shape[0]
-            width_img = img_arr.shape[1]
-            x = 0
-            y = 0
-            with open(os.path.join(self.base_dir_target, "train", "labels", str(self.__iterab) + ".txt"), "w") as f:
-                for label in info["labels"]:
-                    class_label = self.determine_class(label["attributes"])
-                    if class_label == -1:
-                        continue
-                    width = label["w"] / width_img
-                    height = label["h"] / height_img
-                    x = (label["x"] + label["w"] / 2) / width_img
-                    y = (label["y"] + label["h"] / 2) / height_img
-                    f.write(
-                        str(class_label) + " " + str(x) + " " + str(y) + " " + str(width) + " " + str(
-                            height) + "\n")
-            img = Image.fromarray(img_arr)
-            img.save(os.path.join(self.base_dir_target, "train", "images", str(self.__iterab) + ".jpg"))
+            try:
+                path_to_img = (self.base_dir_to_process / "Pictures" / info["image_path"][2:]).resolve()
+                img_arr = cv2.imread(str(path_to_img),cv2.IMREAD_UNCHANGED)
+                # converts it via the  bayer filter into an rgb image
+                img_arr = cv2.cvtColor(img_arr, cv2.COLOR_BAYER_GB2BGR)
+                img_arr = cv2.cvtColor(img_arr, cv2.COLOR_BGR2RGB)
+                img_arr = np.right_shift(img_arr, 4)
+                # set the right tones (convert to 8bit from 12 bit)
+                img_arr = img_arr.astype(np.uint8)
+                # get height of the image for calculation in relation
+                height_img = img_arr.shape[0]
+                width_img = img_arr.shape[1]
+                x = 0
+                y = 0
+                if self.__iterab % 10 == 0:
+                    basePath = self.dest_dir / 'valid'
+                    print(self.__iterab)
+                else:
+                    basePath = self.dest_dir / 'train'
+                with (basePath / "labels" / (str(self.__iterab) + ".txt")).open(mode='w') as f:
+                    for label in info["labels"]:
+                        class_label = self.determine_class(label["attributes"])
+                        if class_label == -1:
+                            continue
+                        width = label["w"] / width_img
+                        height = label["h"] / height_img
+                        x = (label["x"] + label["w"] / 2) / width_img
+                        y = (label["y"] + label["h"] / 2) / height_img
+                        f.write(f'{class_label} {x} {y} {width} {height}\n')
+                img = Image.fromarray(img_arr)
+                img.save((basePath/"images"/ (str(self.__iterab) + ".png")).resolve())
+            except Exception as e:
+                print(e)
             self.__iterab += 1
-            if self.__iterab%10 ==0:
-                print(self.__iterab)
-
+        return self.__iterab
     def determine_class(self, attributes):
         if attributes["state"] == "off" or attributes["state"] == "unknown" or attributes["reflection"] == "reflected":
             return -1
