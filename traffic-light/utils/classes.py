@@ -1,4 +1,5 @@
 import os
+import multiprocessing as mp
 import pathlib
 import shutil
 import numpy as np
@@ -84,7 +85,6 @@ class BoschFilter():
 
 class DTLD():
     def __init__(self, dest_dir: pathlib.Path, src_dir: pathlib.Path, current_count=0):
-
         self.dest_dir = dest_dir
         # get the last element after sorted the list and get from that the last element (which is automatically the
         # largest and then add 1)
@@ -95,44 +95,53 @@ class DTLD():
     def read_all_JSON(self):
         json_base = self.base_dir_to_process / 'DTLD_Labels_v2.0' / 'v2.0' / 'DTLD_all.json'
         list_of_elem = json.load(json_base.open())["images"]
+        data = []
         for info in list_of_elem:
-            # reads it as unchanged thread of data
-            try:
-                path_to_img = (self.base_dir_to_process / "Pictures" / info["image_path"][2:]).resolve()
-                img_arr = cv2.imread(str(path_to_img),cv2.IMREAD_UNCHANGED)
-                # converts it via the  bayer filter into an rgb image
-                img_arr = cv2.cvtColor(img_arr, cv2.COLOR_BAYER_GB2BGR)
-                img_arr = cv2.cvtColor(img_arr, cv2.COLOR_BGR2RGB)
-                img_arr = np.right_shift(img_arr, 4)
-                # set the right tones (convert to 8bit from 12 bit)
-                img_arr = img_arr.astype(np.uint8)
-                # get height of the image for calculation in relation
-                height_img = img_arr.shape[0]
-                width_img = img_arr.shape[1]
-                x = 0
-                y = 0
-                if self.__iterab % 10 == 0:
-                    basePath = self.dest_dir / 'valid'
-                    print(self.__iterab)
-                else:
-                    basePath = self.dest_dir / 'train'
-                with (basePath / "labels" / (str(self.__iterab) + ".txt")).open(mode='w') as f:
-                    for label in info["labels"]:
-                        class_label = self.determine_class(label["attributes"])
-                        if class_label == -1:
-                            continue
-                        width = label["w"] / width_img
-                        height = label["h"] / height_img
-                        x = (label["x"] + label["w"] / 2) / width_img
-                        y = (label["y"] + label["h"] / 2) / height_img
-                        f.write(f'{class_label} {x} {y} {width} {height}\n')
-                img = Image.fromarray(img_arr)
-                img.save((basePath/"images"/ (str(self.__iterab) + ".png")).resolve())
-            except Exception as e:
-                print(e)
-            self.__iterab += 1
+            data.append([info,self.base_dir_to_process,self.dest_dir,self.__iterab,self.yaml_obj])
+            self.__iterab+=1
+        print("data acquisition finished")
+        with mp.Pool(20) as pool:
+           pool.map(DTLD.worker_func,data)
+        print("finished with pool")
         return self.__iterab
-    def determine_class(self, attributes):
+    @staticmethod
+    def worker_func(data):
+        info, src, dest, count, yaml_obj = data
+        try:
+            path_to_img = (src / "Pictures" / info["image_path"][2:]).resolve()
+            img_arr = cv2.imread(str(path_to_img), cv2.IMREAD_UNCHANGED)
+            # converts it via the  bayer filter into an rgb image
+            img_arr = cv2.cvtColor(img_arr, cv2.COLOR_BAYER_GB2BGR)
+            img_arr = cv2.cvtColor(img_arr, cv2.COLOR_BGR2RGB)
+            img_arr = np.right_shift(img_arr, 4)
+            # set the right tones (convert to 8bit from 12 bit)
+            img_arr = img_arr.astype(np.uint8)
+            # get height of the image for calculation in relation
+            height_img = img_arr.shape[0]
+            width_img = img_arr.shape[1]
+            x = 0
+            y = 0
+            if count % 10 == 0:
+                basePath = dest / 'valid'
+            else:
+                basePath = dest / 'train'
+            with (basePath / "labels" / (str(count) + ".txt")).open(mode='w') as f:
+                for label in info["labels"]:
+                    class_label = DTLD.determine_class(label["attributes"],yaml_obj)
+                    if class_label == -1:
+                        continue
+                    width = label["w"] / width_img
+                    height = label["h"] / height_img
+                    x = (label["x"] + label["w"] / 2) / width_img
+                    y = (label["y"] + label["h"] / 2) / height_img
+                    f.write(f'{class_label} {x} {y} {width} {height}\n')
+            img = Image.fromarray(img_arr)
+            img.save((basePath / "images" / (str(count) + ".png")).resolve())
+        except Exception as e:
+            print(e)
+
+    @staticmethod
+    def determine_class(attributes,yaml_obj):
         if attributes["state"] == "off" or attributes["state"] == "unknown" or attributes["reflection"] == "reflected":
             return -1
         class_yaml = attributes["state"]
@@ -148,4 +157,4 @@ class DTLD():
             pass
         else:
             return -1
-        return list(self.yaml_obj.values()).index(class_yaml)
+        return list(yaml_obj.values()).index(class_yaml)
