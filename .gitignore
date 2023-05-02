@@ -5,7 +5,8 @@ data/*
 Preperation/
 traffic-light/yolov5/data/images
 !.gitkeep
-!main.tex
 /doc/main.*
+!/doc/main.tex
+!/doc/main.pdf
 /.vscode
 .env

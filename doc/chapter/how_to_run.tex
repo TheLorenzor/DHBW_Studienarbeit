@@ -64,3 +64,10 @@
 Für weitere Information zu Yolov5 starten: \href{https://github.com/ultralytics/yolov5/wiki/Docker-Quickstart}{Link zu Yolov5 Starten} 
 
 \section{Docker Container stoppen und löschen}
+Zum Stoppen des Containers kann der folgende Befehl gesetzt werden:
+\begin{verbatim}
+    docker stop <container name>
+\end{verbatim}
+Der \textless Container name\textgreater kann durch den Befehl \textit{docker ps} angezeigt werden. Dabei wird in der letzten Spalte der Containername angezeigt und in der ersten Spalte die id. Stop funktioniert mit der Id.
+
+Mit dem Befehl \textit{docker rm \textless Container id\textgreater} kann dann der Container gelöscht werden
