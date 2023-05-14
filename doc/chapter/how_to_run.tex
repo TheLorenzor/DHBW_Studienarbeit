@@ -18,7 +18,8 @@
         \item Folgendes Kommando eingeben (alles eine Zeile)
         \begin{verbatim}
             scp -i <keyfile Name> -P 2022 <Pfad zu Datenablage>
-            docker_user@193.197.11.229:/mnt/data/outside-data/<Name des Projektes>/  
+            docker_user@193.197.11.229:/mnt/data/outside-data/
+            <Name des Projektes>/  
         \end{verbatim}
         \item Information: \textless Pfad zu Datenablage\textgreater ist der Pfad zur Base Directory $\rightarrow$ alles darin wird rüberkopiert / \textless Name des Projektes\textgreater ist ein vorher angelegter Ordner, der den Namen des Projektes trägt, Password eingeben $\rightarrow$ wird von Herrn Müller übergeben
     \end{enumerate}
@@ -54,9 +55,9 @@
         \item \textless cpu limit\textgreater gibt an wie viele CPUs maximal genutzt werden dürfen vom Container als Gleitkommazahl $\rightarrow$ 2 CPUs entspräche 2.0
         \item sowohl die gpus flag, memory flag als auch cpu flag dürfen weg gelassen werden, dann läuft der Container auf der gesamten Hardware    
     \end{itemize}
-    \item wechseln in directory datasets und wechseln bis Base File des \textit{.yaml} gefunden wurde
-    \item entsprechenden Base Path ändern um dem Pfad im Docker container zu repräsentieren
-    \item wechseln in app directory
+    \item versichern Sie sich, dass die Daten unter \textit{/usr/src/datasets/} vorhanden sind
+    \item geben sie \textit{exit} ein in die Kommando Zeile 
+    \item 
     \item eingeben Kommando: siehe \autoref{sec:yolo_train} und nach Angabe Studierenden
     \item client schließen
 
