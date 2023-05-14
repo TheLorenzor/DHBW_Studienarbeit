@@ -1,7 +1,7 @@
 \chapter{Anleitung für Docker starten}
 \section{Docker starten}
 \begin{enumerate}
-    \item Verbinden mit HPC 
+    \item Verbinden mit \ac{hpc} 
     \item Unter \textit{/mnt/data/outside-data/} Ordner mit Namen Projekt anlegen für Studierenden (\textit{mkdir \textless Projektname\textgreater}) 
     \item Studierenden privaten Key vom Nutzer \textit{docker\_user} geben
     \item Studierende kopiert Daten auf \textit{/mnt/data/outside-data/} $\rightarrow$ die folgenden Schritte beziehen sich auf ein Windows Betriebssystem, für Linuxsysteme sind die ähnlichen Schritte nur die Berechtigungsschritte werden per \textit{chown 700 \textless user\textgreater \textless key\textgreater}
@@ -23,7 +23,7 @@
         \end{verbatim}
         \item Information: \textless Pfad zu Datenablage\textgreater ist der Pfad zur Base Directory $\rightarrow$ alles darin wird rüberkopiert / \textless Name des Projektes\textgreater ist ein vorher angelegter Ordner, der den Namen des Projektes trägt, Password eingeben $\rightarrow$ wird von Herrn Müller übergeben
     \end{enumerate}
-    \item Dockercontainer installieren $\rightarrow$ wenn YOLOv5 bitte unten den Anweisungen folgen
+    \item Dockercontainer installieren $\rightarrow$ wenn \ac{yolo}v5 bitte unten den Anweisungen folgen
     \item Client schließen und laufen lassen
 \end{enumerate}
 
@@ -44,7 +44,7 @@
 
 \section{Docker YOLOv5 Container Setup und Vorbereitungen}
 
-\textcolor{red}{\textbf{Wichtig:}} Die Umgebung mit YOLO und PyTorch ist schon aufgesetzt mit dem Dockercontainer der von Dockerhub gezogen wird. Insofern keine Änderungen am Algorithmus vorgenommen wurden, reicht dieser Container vollkommen aus und liefert alle nötigen Umgebungswerkzeuge
+\textcolor{red}{\textbf{Wichtig:}} Die Umgebung mit \ac{yolo} und PyTorch ist schon aufgesetzt mit dem Dockercontainer der von Dockerhub gezogen wird. Insofern keine Änderungen am Algorithmus vorgenommen wurden, reicht dieser Container vollkommen aus und liefert alle nötigen Umgebungswerkzeuge
 
 
 \begin{enumerate}
@@ -52,7 +52,7 @@
     \item eingeben Kommando unten (alles eine Zeile)
     \begin{verbatim}
         docker run --ipc=host -it --gpus all --memory="<memory limit>"
-        --cpus="<cpu limit>" -v 
+        --cpus="<cpu limit>" --network host -v 
         /mnt/data/outside-data/<projektname>/:/usr/src/datasets
         ultralytics/yolov5:latest
     \end{verbatim}
@@ -60,6 +60,7 @@
         \item \textless memory limit\textgreater  wird eingegeben wie viel GB der Container nutzen darf, dabei immer nur das Vorzeichen Gigabyte  $\rightarrow$ g / Megabyte $\rightarrow$ m
         \item \textless cpu limit\textgreater gibt an wie viele CPUs maximal genutzt werden dürfen vom Container als Gleitkommazahl $\rightarrow$ 2 CPUs entspräche 2.0
         \item sowohl die gpus flag, memory flag als auch cpu flag dürfen weg gelassen werden, dann läuft der Container auf der gesamten Hardware    
+        \item wenn der Container nicht die GPU nutzen soll, muss die Flag: \textit{--gpus all} weggelassen werden
     \end{itemize}
     \item versichern Sie sich, dass die Daten unter \textit{/usr/src/datasets/} vorhanden sind
     \item geben sie \textit{exit} ein in die Kommandozeile 
@@ -78,7 +79,7 @@
 \label{sec:yolo_train}
 Um das Modell zu trainieren sollte in den Docker Container gewechselt werden und das Terminal geöffnet werden. Mit dem Kommando \textit{bash} wird in Bash gewechselt und es kann gesehen werden in welchem Ordner man sich befindet. 
 
-Für das Training des Modells muss in das  Base Directory von dem YOLOv5 Repository gewechselt werden. Darin befindet sich die \textit{train.py} datei. Hierbei kann man das Training mit dem folgenden Befehl starten:
+Für das Training des Modells muss in das  Base Directory von dem \ac{yolo}v5 Repository gewechselt werden. Darin befindet sich die \textit{train.py} datei. Hierbei kann man das Training mit dem folgenden Befehl starten:
 \begin{verbatim}
     python train.py --img <size_of_img> --batch <size_of_batches> --epochs <epochs>
     

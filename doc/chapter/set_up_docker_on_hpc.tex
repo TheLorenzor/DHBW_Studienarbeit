@@ -1,1 +1,31 @@
 \chapter{Docker aufsetzen auf dem HPC}
+Dieses Kapitel beschäftigt sich mit dem aufsetzen der Docker Umgebung. 
+
+\textcolor{red}{\textbf{Disclaimer:}}Dieses Tutorial ist ein Weg, wie man alles aufsetzen kann. Dabei gibt es mehrere Wege und aufgrund der unterschiedlichen Konfigurationen von Systemen. Ist dies kein allgemeiner Guide. Dies ist ein Weg wie der autor den \ac{hpc} aufgesetzt hat. Generell werden hier viele Quellen zitiert, da dies für jedes System unterschiedlich ist.
+
+\section{Installation Docker}
+\textbf{Wichtig:} Docker funktioniert auf den Ubuntuversionen 20.10 und 22.10. Für weitere Informationen dazu bitte die \textit{\href{https://docs.docker.com/engine/install/ubuntu/}{Docker Dokumentation}} aufrufen.
+
+Für die Installation der Docker Umgebung sollten folgende Schritte befolgt werden:
+
+\begin{enumerate}
+    \item mit \textit{sudo apt-get update} das gesamte System updaten bzw. die Resourcen updaten
+    \item Docker installieren nach der \textit{\href{https://docs.docker.com/engine/install/ubuntu/}{Docker Dokumentation}}. Dabei ist vor allem wichtig die URLs für das Installationstool \textit{apt}. Für den Fall, dass dies nicht funktioniert
+    \item mit \textit{sudo docker run hello-world} sollte danach funktionieren und ohne Probleme laufen
+\end{enumerate}
+
+Die folgenden Punkte beziehen sich auf verschiedene Einstellungen.
+
+\subsection{Konfiguration Dockergruppe und zuweisung rechte}
+Damit manche Leute Dockerbefehle ausführen können, bräuchten diese normalerweise root rechte bzw. sudo rechte. Damit dies nicht gewährleistet werden muss, wird eine Gruppe namens docker erstellt, die Zugriffe haben auf den docker dämon. 
+
+\textcolor{red}{\textbf{Achtung:}} Es sollten die Personen, die Teil der Gruppe sind sorgfältig ausgeäwählt werden da durch den Dämon indirekt die Personen root Rechte haben bzw. durch Docker Dinge als root ausführen können. Somit ist dies zu vermeiden. 
+
+\begin{enumerate}
+    \item Für das konfigurieren folgen Sie der \textit{\href{https://docs.docker.com/engine/install/linux-postinstall/}{Anleitung}}. 
+    \item Anschließend können sie über den Befehl \textit{ sudo usermod -aG docker \textless user\textgreater} einen Nutzer hinzufügen. Dafür muss \textless user\textgreater ersetzt werden durch den eigentlichen Benutzernamen
+    \item anschließend können per \textit{docker \textless command\textgreater} Docker Container gestartet, bearbeitet und gestoppt werden
+\end{enumerate}
+
+\subsection{Verschieben der Dockerdaten}
+Hier wird gezeigt wie die Dockerdaten in ein anderes Verzeichnis geschoben werden können und somit auch die Daten auf eine andere Platte geschoben werden können um evtl. Speicherplatz zu sparen oder große Plattenkapazitäten auszureizen. Dafür ist es zu empfehlen der Anleitung von \textit{\href{https://www.guguweb.com/2019/02/07/how-to-move-docker-data-directory-to-another-location-on-ubuntu/}{GuguWeb}} oder \textit{\href{https://www.ibm.com/docs/en/z-logdata-analytics/5.1.0?topic=compose-relocating-docker-root-directory}{IBM}} zu folgen.
