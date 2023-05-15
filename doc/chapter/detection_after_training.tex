@@ -1,6 +1,5 @@
 \chapter{Bilderkennung und Leistungsnachweise}
-Nach der Trainingsphase kann aus dem Verzeichniss \textit{/usr/src/app/runs/train/<\textless number\_exp\textgreater/weights} die Gewichtsdatei: \textit{best.pt} heraus copiert werden dies kann mit Hilfe des Docker Kommandos \textit{docker cp} realisiert werden. Ahnschließend kann dies wieder auf den lokalen Rechner übertragen werden. Um nun innerhalb eines Videos oder eines Bildes docker die Objekte zu erkennen muss folgender Kommando eingegeben werden. Das Kommando muss ausgeführt werden im Basis Verzeichnis des \ac{yolo} Algorithmus. Dies kann entweder innerhalb des Docker Container sein oder auf dem eigenen Rechner, wo man den \textit{\ac{yolo}v5}-Algorithmus erhält, indem man das entsprechende Repository von ultralytics klont.
-
+Nach der Trainingsphase kann aus dem Verzeichniss \textit{/usr/src/app/runs/train/<\textless number-exp\textgreater/weights} die Gewichtsdatei: \textit{best.pt} heraus kopiert werden dies kann mithilfe des Docker Kommandos \textit{docker cp} realisiert werden. Anschließend kann dies wieder auf den lokalen Rechner übertragen werden. Um nun innerhalb eines Videos oder eines Bildes Docker die Objekte zu erkennen muss folgender Kommando eingegeben werden:
 \begin{verbatim}
     python detect.py --source <source> --weights <pfad-to-weights> 
     --conf <confidence>
@@ -12,3 +11,5 @@ Nach der Trainingsphase kann aus dem Verzeichniss \textit{/usr/src/app/runs/trai
     \item \textless confidence\textgreater  $\rightarrow$ definiert die Konfidenz, ab der ein Label erstellt werden soll. Diese wird als Dezimalstelle von conf$\in [0,1]$ dargestellt
     \item für weitere Optionen wird an dieser Stelle gebeten die offizielle \href{https://github.com/ultralytics/yolov5/blob/master/detect.py}{Dokumentation} einzusehen
 \end{itemize}
+
+Der Befehl muss ausgeführt werden im Basis Verzeichnis des \ac{yolo} Algorithmus. Dies kann entweder innerhalb des Docker Container sein oder auf dem eigenen Rechner, wo man den \textit{\ac{yolo}v5}-Algorithmus erhält, indem man das entsprechende Repository von ultralytics klont.
