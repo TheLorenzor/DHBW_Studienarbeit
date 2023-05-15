@@ -15,24 +15,32 @@ Für die Studienarbeit wird der YOLOv5 von ultralytics \cite{glennjocher.2023} g
     \item Docker deployable
     \item CUDA- und GPU-Unterstützung
     \item Pytorch Beschleungigung
+    \item viele Tutorials und Ressourcen für das Erlernen des Algorithmus
 \end{itemize}
 
 
 \section{Generelle Ordnerstruktur}
-Der \ac{yolo}-Algorithmus erwartet zum funktionieren eine generelle Ordnerstruktur, gezeigt in \autoref{fig:folderYolo}. Der oberste Ordner ist dabei der Projektnameordner. In diesem müssen alle Projektrelevanten Bilder und Label enthalten sein. 
+\label{sec:yolo_folderstructure}
+Der \ac{yolo}-Algorithmus erwartet eine gewisse Ordnerstruktur. Diese muss eingehalten werden, damit der Algorithmus funktioniert. Ein Diagramm der Ordnerstruktur ist zu sehen in \autoref{fig:folderYolo}. Der hierarchisch gesehen höchste Ordner ist der Projektordner. Darin sollten alle Daten für den YOLO-Algorithmus enthalten sein. Dieser Ordner enthält die Trainings- und Testdateien. Optional kann auch ein Validierungsdatensatz enthalten sein und die \textit{.yaml} Datei.
 
-Auch darin enthalten sein muss das \textit{.yaml} file. Das wird in \autoref{sec:yaml_class} noch mal genauer beschrieben. Ansonsten müssen neben dem \textit{.yaml} file noch ein Ordner für die Trainingsdaten enthalten sein. Optional auch ein Testdatenordner und Validierungsdatenordner. Diese müssen wie der Trainingsdatenordner unter dem Projektordner eingeordnet werden.
+Es wird empfohlen die \textit{.yaml} Datei in den Projektordner zu inkludieren. Der Aufbau der Datei wird in \autoref{sec:yaml_class} genauer beschrieben. Alle Dateien sind innerhalb des Projektordners einzugliedern.
 
-Der Test, Train und Validordner müssen alle jeweils 2 Ordner haben für images und labels. Diese müssen auch über die verschiedenen Ordner exakt gleich benannt sein. Das heißt auch in der Groß- und Kleinschreibung. 
+Der Test, Train und Validordner müssen alle jeweils 2 Ordner besitzen mit dem Namen \textit{images} und \textit{labels}. Diese müssen auch über die verschiedenen Ordner exakt gleich, inklusive der Groß- und Kleinschreibung benannt sein.
 
-In dem images Ordner sind die vielen Testbilder enthalten, und in Labels die entsprechenden label dazu. Als Bildformate werden von dieser \ac{yolo} Version png, jpg und tiff Formate verarbeitet. Jeder Bildname muss einzigartig vorhanden sein (ich empfehle einfach die Bilder durchzunumerieren).
+Der \textit{images} Ordner enthält die entsprechenden Bilder. Zum Trainieren akzeptiert der \ac{yolo}-Algorithmus unter anderem die Bildformate \textit{png},\textit{jpg} und \textit{tiff}. Innerhalb des Ordners müssen alle Bilder einen einzigartigen Namen besitzen (es wird an dieser Stelle empfohlen, alle Bilder durchzunummerieren)
 
-Bei den labeln werden nur .txt Dateien akzeptiert. Wichtig ist hier, dass die Daten zu einem Bild in einer gleichnamen .txt-Datei enthalten ist. Wenn als Beispiel ein Bild mit dem Namen \textit{test.jpg} vorhanden ist muss im Ordner labels auch das dazugehörige Labelfile \textit{test.txt} heißen.
+Der \textit{labels}-Ordner enthält die Label zu den entsprechenden Bildern in \textit{images}. Dabei müssen alle Label für ein entsprechendes Bild in einer gleichnamigen Textdatei mit der Endung \textit{.txt} unter dem Ordner \textit{labels} abgespeichert werden. Ein Beispiel: In dem Trainingsordner im Unterordner \textit{images} gibt es ein Bild mit dem Namen \textit{test.jpg}. Die dazugehörige Labeldatei wird im Ordner \textit{labels} unter dem Namen \textit{test.txt} gespeichert.
 
-\section{Aufbau der Label}
-Jede Textdatei beinhaltet alle Label, die in dem dazugehörigen Bild zu finden sind. Dabei steht jede Zeile für ein Objekt das auf der Abbildung auffindbar ist. Diese können sich auch überlappen. Eine Zeile ist wie aufgebaut:
+Im folgenden Abschnitt sollen nun der Aufbau einer solchen Labeldatei erläutert werden.
+
+\section{Aufbau der Labeldatei}
+Eine Labeldatei ist wie in \autoref{sec:yolo_folderstructure} definiert eine Textdatei mit entsprechendem Dateiname. Es wird empfohlen die Datei UTF-8 zu enkodieren. 
+
+Jede Datei besteht aus einer unterschiedlichen Anzahl an Zeilen. Jede Zeile der Datei beschreibt ein Objekt, das in der Abbildung zu sehen ist. Es ist möglich, dass diese Bildbereiche eiinander überlappen. Eine Zeile ist wie folgt aufgebaut:
 \begin{tcolorbox}
-    \textless class\textgreater\space \textless x\_center\textgreater \space \textless y\_center\textgreater \space\textless width\textgreater \space\textless height\textgreater 
+    \begin{verbatim}
+        <class> <x-center> <y-center> <width> <height>
+    \end{verbatim}
 \end{tcolorbox}
 \begin{figure}
     \begin{center}
@@ -41,16 +49,23 @@ Jede Textdatei beinhaltet alle Label, die in dem dazugehörigen Bild zu finden s
         \label{fig:yoloFormat}
     \end{center}
 \end{figure}
-Die "class" gibt an, welche Klasse das markierte Objekt hat. Die Klasse und dessen Name wird in dem YAML File definiert, worin auch angegeben wird wie viele Klassen es insgesamt gibt aber das wird in \autoref{sec:yaml_class} noch einmal genauer erklärt. Der \textit{x\_center} gibt den Mittelpunkt des Labels an entlang der x-Achse (horizontal). \textit{y\_center} gibt das gleiche in der Vertikalen Richtung an. Genau kann das in \autoref{fig:yoloFormat} sehen. Der Punkt in der Mitte ist definiert durch \textit{x\_center} und \textit{y\_center}. Die komplette Breite und Lange wird entsprechend durch \textit{width} und \textit{height} dargestellt. 
+\begin{itemize}
+    \item \textless class\textgreater gibt die Klasse an des markierten Objektes. Klassen werden durch die \textit{.yaml}-Datei definiert. Gekennzeichnet wird diese durch eine Zahl. Weiteres in \autoref{sec:yaml_class}
+    \item \textless x-center\textgreater $\rightarrow$ Angabe des Zentrums des Rechteckes in x-Richtung 
+    \item \textless y-center\textgreater $\rightarrow$ Angabe des Zentrums des Rechteckes in y-Richtung 
+    \item \textless width\textgreater $\rightarrow$ die Breite des Rechteckes bzw. des markierten Bereiches
+    \item \textless height\textgreater $\rightarrow$ die Höhe des Rechteckes bzw. des markierten Bereiches
+\end{itemize}
+Ein Beispiel ist zu sehen in \autoref{fig:yoloFormat}. \textit{x\_center, y\_center, width, height} werden dargestellt als Verhältnis zur Gesamtlänge/-breite. Die Zahlen sind definiert durch $n\in[0,1]$.
 
-Insgesamt werden alle Maße nicht in der px Anzahl dargestellt. Es wird dargestellt als das Verhältnis von der Länge/ Breite zur Gesamtlänge und -breite. Es wird dargestellt als eine \textit{float}-Nummer zwischen 0 und 1. Bei dem \textit{x\_center} und \textit{y\_center} wird zwischen den Punkt und dem Nullpunkt die Länge und Verhältnis zum gesamten Bild genommen in der entsprechenden Dimension. 
+Die Klassen werden im \textit{.yaml} Dateiformat definiert. Diese wird im folgenden Abschnitt genauer beleuchtet.
 
 \section{YAML Klassifizierungsfile}
 \label{sec:yaml_class}
 
-Für jedes Projekt gibt es im Basis Folder ein \textit{.yaml} File mit einem selbstgewählten Namen. Dieses File besteht aus drei Teilen. Diese sind wie folgt aufgebaut:
+Für jedes Projekt gibt es im Projektordner eine \textit{.yaml} Datei mit einem beliebigen Namen. Die \textit{.yaml}-Datei muss allerdings einem gewissen Aufbau folgen der folgend gezeigt wird. Dabei muss die Ordnerstruktur eingehalten werden wie in \autoref{fig:folderYolo} gezeigt:
 \begin{verbatim}
-    path: <path-to-yolo>
+    path: <path-to-project>
     train: <rel-path-to-train-dir>
     val: <rel-path-to-val-dir>
 
@@ -58,7 +73,9 @@ Für jedes Projekt gibt es im Basis Folder ein \textit{.yaml} File mit einem sel
         0: <name>
         ...
 \end{verbatim}
-
-\textless rel-path-to-train-dir\textgreater ist der relative Pfad zum Trainingsdatensatz. Wenn der Standarttrainingssatzaufbau wie in \autoref{fig:folderYolo} aufgesetzt ist, dann ist dies \textit{./train/}. Der Pfad für den Validierungsdatensatz \textless rel-path-to-val-dir\textgreater ist ähnlich zu dem Trainingsdatensatzpfad. Beim Standardformat wäre es \textit{./valid/}. Der Pfad gibt den momentan Pfad an. Dieser wird durch die API ersetzt und kann standardisiert mit einem  \glqq .\grqq angegeben.
-
-Unter \textit{names} werden die Namen aller relevanten Klassen angegeben. Dies sind die Klassen der jeweiligen Label und deren Bedeutung. Das heißt für ein Label einer Roten und gelben Ampel die geradeaus führt würde es Beispielsweise heißen \textit{0: rot-gelb-geradeaus}. Alle Label werden aufsteigend nummeriert. Die jeweilige Nummer in dem YAML File muss mit der jeweiligen Nummer in den \textit{.txt} Files übereinstimmen. Wenn die Nummer dieselbe ist, geht der YOLO-Aglorithmus aus, dass die jeweilige Nummer des Labels den Text beschreibt der im \textit{.yaml} File steht.
+\begin{itemize}
+\item \textless path-to-project\textgreater  $\rightarrow$ Absoluter Pfad zum Projektordner (inklusive des Projektordners)
+\item \textless rel-path-to-train-dir\textgreater  $\rightarrow$ relativer Pfad zu den Bildern des Trainingsdatensatz ausgehend vom \textless path-to-project\textgreater-Pfad
+\item \textless rel-path-to-val-dir\textgreater  $\rightarrow$ relativer Pfad zu den Bildern des Validierungsdatensatz ausgehend vom \textless path-to-project\textgreater-Pfad
+\item \textit{names} $\rightarrow$ Liste aller Klassen und der Verbindung zwischen Name der Klasse angegeben durch \textless name\textgreater  und der Nummer. Die Nummer, beginnend mit 0 muss auch äquivalent sein zu der Nummerierung in den Textdateien. Der \ac{yolo}-Algorithmus assoziiert die Namen mit den Nummern durch die \textit{.yaml}-Datei
+\end{itemize}

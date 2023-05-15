@@ -5,7 +5,7 @@ Für eine erfolgreiche Installation der Umgebung auf dem Testsystem (für Develo
     \item Python >= 3.9
     \item PyTorch $\rightarrow$ latest stable Version
     \item NVIDIA CUDA Toolkit $\rightarrow$ entsprechende Version (\textbf{muss NICHT die neuste sein})
-    \item (\ac{yolo}v5)
+    \item \ac{yolo}v5
 \end{itemize}
 
 Zum Zeitpunkt des Schreibens ist die neuste PyTorch Version 1.13.1. Dazu muss der entsprechende CUDA Compiler ausgesucht werden. Das wäre in diesem Fall die Version 11.6 und nicht die aktuellste CUDA Version. Es wird empfohlen nicht CUDA selber zu installieren, sondern dies mit PyTorch zusammen installieren. Installiert wird PyTorch zusammen mit CUDA mit:
@@ -14,17 +14,3 @@ Zum Zeitpunkt des Schreibens ist die neuste PyTorch Version 1.13.1. Dazu muss de
     --extra-index-url https://download.pytorch.org/whl/cu117
 \end{verbatim}
 Der Link kann je nachdem geändert werden, was für eine CUDA Version benötigt wird. Dies kann sich von der Version des NVIDIA Treibers abhängig sein.
-\section{Probleme + Lösungen der Installation}
-
-Bei der Installation kann es zu verschiedenen Probleme kommen, die zumindest beim Bearbeiten der Arbeit entstanden sind.
-
-\textbf{Problem 1:} Der Dockercontainer Startet nicht.
-\label{text:docker}
-\textbf{Lösung:} 
-\begin{enumerate}
-    \item Das GitHub Repository von ultralytics \cite{glennjocher.2023} neu clonen 
-    \item Das Dockerfile von \textit{./utils/docker/Dockerfile} in \textit{./} rein kopieren
-    \item Dockerfile ausführen  (das kann je nach Anwendung eine sehr lange Zeit in Anspruch nehmen aufgrund der Größe)
-    \item Dockercontainer starten
-\end{enumerate}
-

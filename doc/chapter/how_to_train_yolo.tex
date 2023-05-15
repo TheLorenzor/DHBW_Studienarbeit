@@ -12,19 +12,21 @@
         \item Rechtsklick auf private Key im File Explorer $\rightarrow$ Properties $\rightarrow$ Sicherheit $\rightarrow$ erweitert $\rightarrow$ sollte Berechtigung sehen wie in \autoref{fig:berecht_1}
         \item klicken auf Vererbung Deaktivieren
         \item Hinzufügen klicken $\rightarrow$ SYSTEM suchen $\rightarrow$ Lese- und Execute und Schreibrechte geben $\rightarrow$ Ok klicken
-        \item Hinzufügen klicken $\rightarrow$ \textless eigenen Nutzer\textgreater  suchen $\rightarrow$ Lese- und Execute und Schreibrechte geben $\rightarrow$ Ok klicken
+        \item Hinzufügen klicken $\rightarrow$ \textit{\textless eigenen Nutzer\textgreater}  suchen $\rightarrow$ Lese- und Execute und Schreibrechte geben $\rightarrow$ Ok klicken
         \item danach sollte Berechtigung aussehen wie in \autoref{fig:berecht_2}
         \item Kommandozeile öffnen $\rightarrow$ wechseln in Directory wo Key legt
         \item Folgendes Kommando eingeben (alles eine Zeile)
         \begin{verbatim}
-            scp -i <keyfile Name> -P 2022 <Pfad zu Datenablage>
+            scp -i <keyfile-name> -P 2022 <path-to-data>
             docker_user@193.197.11.229:/mnt/data/outside-data/
-            <Name des Projektes>/  
+            <name-project>/  
         \end{verbatim}
-        \item Information: \textless Pfad zu Datenablage\textgreater ist der Pfad zur Base Directory $\rightarrow$ alles darin wird rüberkopiert / \textless Name des Projektes\textgreater ist ein vorher angelegter Ordner, der den Namen des Projektes trägt, Password eingeben $\rightarrow$ wird von Herrn Müller übergeben
+        \begin{itemize}
+            \item \textless path-to-data\textgreater $\rightarrow$ Pfad zur Base Directory $\rightarrow$ alles darin wird rüberkopiert
+            \item \textless name-project\textgreater ist ein vorher angelegter Ordner, der den Namen des Projektes trägt, Password eingeben $\rightarrow$ wird von Herrn Müller übergeben
+        \end{itemize} 
     \end{enumerate}
-    \item Dockercontainer installieren $\rightarrow$ wenn \ac{yolo}v5 bitte unten den Anweisungen folgen
-    \item Client schließen und laufen lassen
+    \item Dockercontainer installieren und laufen lassen
 \end{enumerate}
 
 \begin{figure}
@@ -44,23 +46,23 @@
 
 \section{Docker YOLOv5 Container Setup und Vorbereitungen}
 
-\textcolor{red}{\textbf{Wichtig:}} Die Umgebung mit \ac{yolo} und PyTorch ist schon aufgesetzt mit dem Dockercontainer der von Dockerhub gezogen wird. Insofern keine Änderungen am Algorithmus vorgenommen wurden, reicht dieser Container vollkommen aus und liefert alle nötigen Umgebungswerkzeuge
+\textcolor{red}{\textbf{Wichtig:}} Die Umgebung mit \ac{yolo} und PyTorch ist schon aufgesetzt mit dem Dockercontainer der von Dockerhub gezogen wird. Insofern keine Änderungen am Algorithmus vorgenommen wurden, reicht dieser Container vollkommen aus und liefert alle nötigen Umgebungswerkzeuge.
 
 
 \begin{enumerate}
     \item Entsprechenden Dockercontainer Pullen per Kommando: \textit{docker pull ultralytics/yolov5:latest} 
     \item eingeben Kommando unten (alles eine Zeile)
     \begin{verbatim}
-        docker run --ipc=host -it --gpus all --memory="<memory limit>"
-        --cpus="<cpu limit>" --network host -v 
+        docker run --ipc=host -it --gpus all --memory="<memory-limit>"
+        --cpus="<cpu-limit>" --network host -v 
         /mnt/data/outside-data/<projektname>/:/usr/src/datasets
         ultralytics/yolov5:latest
     \end{verbatim}
     \begin{itemize}
-        \item \textless memory limit\textgreater  wird eingegeben wie viel GB der Container nutzen darf, dabei immer nur das Vorzeichen Gigabyte  $\rightarrow$ g / Megabyte $\rightarrow$ m
-        \item \textless cpu limit\textgreater gibt an wie viele CPUs maximal genutzt werden dürfen vom Container als Gleitkommazahl $\rightarrow$ 2 CPUs entspräche 2.0
-        \item sowohl die gpus flag, memory flag als auch cpu flag dürfen weg gelassen werden, dann läuft der Container auf der gesamten Hardware    
-        \item wenn der Container nicht die GPU nutzen soll, muss die Flag: \textit{--gpus all} weggelassen werden
+        \item \textless memory-limit\textgreater $\rightarrow$ Angabe wie viel RAM der Container nutzen darf $\rightarrow$ Vorzeichen wichtig: Gigabyte  $\rightarrow$ g / Megabyte $\rightarrow$ m
+        \item \textless cpu-limit\textgreater $\rightarrow$ Angabe der CPU Begrenzung / wie viele CPUs dürfen maximal genutzt werden. Angabe als Gleitkommazahl: 2 CPUs entspräche 2.0
+        \item sowohl die memory flag als auch cpu flag dürfen weg gelassen werden, dann läuft der Container mit den gesammten Resourcen des weg gelassenen Flag die der Rechner zur Verfügung stellt
+        \item wenn der Container nicht die GPU bzw. der YOLO Algorithmus nutzen soll, muss die Flag: \textit{--gpus all} weggelassen werden
     \end{itemize}
     \item versichern Sie sich, dass die Daten unter \textit{/usr/src/datasets/} vorhanden sind
     \item geben sie \textit{exit} ein in die Kommandozeile 
