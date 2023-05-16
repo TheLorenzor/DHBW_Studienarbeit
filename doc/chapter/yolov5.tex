@@ -79,3 +79,14 @@ Für jedes Projekt gibt es im Projektordner eine \textit{.yaml} Datei mit einem 
 \item \textless rel-path-to-val-dir\textgreater  $\rightarrow$ relativer Pfad zu den Bildern des Validierungsdatensatz ausgehend vom \textless path-to-project\textgreater-Pfad
 \item \textit{names} $\rightarrow$ Liste aller Klassen und der Verbindung zwischen Name der Klasse angegeben durch \textless name\textgreater  und der Nummer. Die Nummer, beginnend mit 0 muss auch äquivalent sein zu der Nummerierung in den Textdateien. Der \ac{yolo}-Algorithmus assoziiert die Namen mit den Nummern durch die \textit{.yaml}-Datei
 \end{itemize}
+
+\section{Docker Container initialisieren}
+
+Die Umgebung auf Basis PyTorch und \ac{yolo} kann in 2 Wegen aufgesetzt werden
+
+\textcolor{red}{\textbf{Wichtig:}} Für diese Studienarbeit ist es nicht notwendig den \ac{yolo}-Algorithmus zu ändern und es reicht die erste Variante zu nutzen. Einzig die Daten müssen vorverarbeitet werden.
+
+\begin{itemize}
+    \item wenn keine Änderungen am \ac{yolo}-Algorithmus getätigt werden müssen, reicht es den Docker Container von Dockerhub herunterzuladen (\textit{\href{https://hub.docker.com/r/ultralytics/yolov5}{siehe hier}})
+    \item wenn der \ac{yolo}-Algorithmus geändert werden muss, muss das GitHub-Repository geklont werden (\textit{\href{https://github.com/ultralytics/yolov5}{hier zu finden}}). Anschließend müssen die benötigten Änderungen ausgeführt werden. Zum Schluss befindet sich im Pfad \textit{/utils/docker/} die Files zum bauen des Docker Container. Diesen ausführen und nach Möglichkeit abändern.
+\end{itemize}
