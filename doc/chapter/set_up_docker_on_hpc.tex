@@ -29,3 +29,8 @@ Damit manche Leute Dockerbefehle ausführen können, bräuchten diese normalerwe
 
 \subsection{Verschieben der Dockerdaten}
 Hier wird gezeigt wie die Dockerdaten in ein anderes Verzeichnis geschoben werden können und somit auch die Daten auf eine andere Platte geschoben werden können um evtl. Speicherplatz zu sparen oder große Plattenkapazitäten auszureizen. Dafür ist es zu empfehlen der Anleitung von \textit{\href{https://www.guguweb.com/2019/02/07/how-to-move-docker-data-directory-to-another-location-on-ubuntu/}{GuguWeb}} oder \textit{\href{https://www.ibm.com/docs/en/z-logdata-analytics/5.1.0?topic=compose-relocating-docker-root-directory}{IBM}} zu folgen.
+
+\section{Aktivieren des NVIDIA-Supports für Dockercontainer}
+Damit der \ac{yolo}-Algorithmus die Grafikkarten nutzen kann, muss ein NVIDIA-Docker installiert werden. Dieser dient als die Brücke zwischen der Dockervirtualisierung und der Hardware. Dies kann erst geschehen nachdem Docker installiert ist.
+
+Für die Installation bitte der \textit{\href{https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html}{Dokumentation}} folgen
