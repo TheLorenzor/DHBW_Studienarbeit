@@ -10,4 +10,4 @@ traffic-light/yolov5/data/images
 !/doc/main.pdf
 /.vscode
 .env
-/Models/*.pt
+/Models

@@ -1,0 +1,20 @@
+\chapter{Ergebnisse und Faszit}
+Nachdem dem Durchlauf der Trainingsphase gibt es nun einige Ergbenisse die hier kurz dargestellt werden sollen. Die Evaluierung geschieht anhand des beigelegten Videos, dass durch die Trainierten Gewichte entstanden ist.
+
+Dabei lässt sich heraus stellen, dass überproportionale viele Grüne und Rote und Gelbe Ampeln entdeckt werden und wenige bis gar keine Schilder. Dies liegt an den folgenden Gründen:
+
+\begin{enumerate}
+    \item Die Datendichte für Grüne und Rote Ampeln ist überproportional hoch im Vergleich zu den anderen (siehe \autoref{fig:label_prop})
+    \item Die geringe Auflösung der Bilder. Aufgrund von technischen und zeitlichen Limitationen konnten die Bilder nicht mit voller Auflösung detektiert werden, sondern mussten auf 480 Pixel reduziert werden.
+    \item Aufgrund lang anhaltender Aufbauphasen des HPCs und langen Konfigurations und Kommunikationswegen kann nicht genug Zeit genutzt werden, um das Modell noch mal neu zu trainieren. Dies muss zu einem späteren Zeitpuntk mit einem eventuell abgeänderten Datensatz erneut passieren.
+\end{enumerate}
+
+\begin{figure}
+    \includegraphics[width=\textwidth]{data/img/labels.jpg}
+    \caption{Eiigenschaften der Label detektiert durch den Yolo Algorithmus}
+    \label{fig:label_prop}
+\end{figure}
+
+\section{Ausblick und Fazit}
+
+Zusammenfassend kann man sagen, dass die Gewichte es schaffen zuverlässig grüne und rote Lichter zu detektieren, allerdings gibt es Probleme die Straßenschilder zu klassifizieren und besondere Grün- und Rotphasen zu erkennen, wie Pfeile in eine bestimmte Richtung. Dies liegt an verschiedenen organisatorischen und Daten satztechnischen Problemen. In der Zukunft kann diese Arbeit und das Modell als Grundlage dienen für weitere Trainingsphasen mit angepasstem Datensatz und besserer Hardware und so kann schlussendlich eine umfassende Bilderkennung für Straßenschilder und Ampeln erstellt werden. Diese Arbeit legt den Prozesstechnischen Grundstein dafür und stellt das erste Trainingsmodell zur Verfügung.
