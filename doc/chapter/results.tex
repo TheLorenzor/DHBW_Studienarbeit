@@ -4,8 +4,9 @@ Nachdem dem Durchlauf der Trainingsphase gibt es nun einige Ergbenisse die hier 
 Dabei lässt sich heraus stellen, dass überproportionale viele Grüne und Rote und Gelbe Ampeln entdeckt werden und wenige bis gar keine Schilder. Dies liegt an den folgenden Gründen:
  
 \begin{enumerate}
-    \item Die Datendichte für Grüne und Rote Ampeln ist überproportional hoch im Vergleich zu den anderen (siehe \autoref{fig:label_prop})
-    \item Die geringe Auflösung der Bilder. Aufgrund von technischen und zeitlichen Limitationen konnten die Bilder nicht mit voller Auflösung detektiert werden, sondern mussten auf 480 Pixel reduziert werden.
+    \item \textbf{Ungleiche Datendichte:} Die Datendichte für Grüne und Rote Ampeln ist überproportional hoch im Vergleich zu den anderen (siehe \autoref{fig:label_prop})
+    \item \textbf{Geringe Aulösung der Bilder:} Aufgrund von technischen und zeitlichen Limitationen konnten die Bilder nicht mit voller Auflösung detektiert werden, sondern mussten auf 480 Pixel reduziert werden.
+    \item \textbf{Ungenaue Daten:} Die Datensätze, die die Ampeln enthalten haben, keine Straßenschilder markiert. Dadurch entsteht eine Ungenauigkeit, da ein Großteil des Datensatzes die Schilder als nicht relevant markiert und somit vom Algorithmus ignoriert werden. Um dies zu lösen, müssen die gefilterten Daten konsistent sein und noch einmal überarbeitet und die Label erneut validiert werden.
     \item Aufgrund lang anhaltender Aufbauphasen des HPCs und langen Konfigurations und Kommunikationswegen kann nicht genug Zeit genutzt werden, um das Modell noch mal neu zu trainieren. Dies muss zu einem späteren Zeitpuntk mit einem eventuell abgeänderten Datensatz erneut passieren.
 \end{enumerate}
 
